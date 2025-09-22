@@ -14,6 +14,11 @@
   letter-spacing: .2px;
 }
 
+/* Override to show category bar on internal pages */
+nav.category-bar { display: flex !important; }
+
+/* Redirect to home page when clicking chips is handled in script.js */
+
 /* Stronger override vs built-in nav.category-bar rules */
 nav.menu-groups.category-bar,
 nav.menu-groups.category-bar a,
