@@ -1,0 +1,104 @@
+/*
+  Condensed & small navigation styling with light active state.  
+  This version further reduces font size, compresses the letters horizontally,
+  decreases the gap between words to roughly a fifth of previous values,
+  and changes the colour to a lighter pink on hover/active without losing brightness.  
+*/
+
+:root {
+  --teal: #016a60;
+  /* Base barbie pink colour */
+  --pink: #ff2aa7;
+  /* Active state: a brighter, more saturated barbie pink for pressed tabs.  */
+  --pink-active: #ff54c0;
+}
+
+body {
+  margin: 0;
+  background-color: var(--teal);
+  overflow-x: hidden;
+}
+
+.tabs-wrap {
+  position: relative;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 1.2rem 1.5rem;
+  scrollbar-width: none;
+}
+
+.tabs-wrap::-webkit-scrollbar {
+  display: none;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  /* Reduce the gap between items by roughly a fifth */
+  /* Make the spacing between words even tighter – roughly five times smaller than the original */
+  /* Set spacing between words similar to the provided sketch: larger than our ultra‑tight version but still compact */
+  gap: clamp(0.2rem, 0.9vw, 0.5rem);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.tabs .tab {
+  display: block;
+  font-family: 'IntroRustG-Base2Line', sans-serif;
+  /* Reduce the height of the text */
+  /* Make the letters modest in height to improve legibility */
+  font-size: clamp(0.8rem, 2.2vw, 2.8rem);
+  /* Increase weight to make glyphs stand out without an outline */
+  font-weight: 900;
+  line-height: 1;
+  /* Bring letters a bit closer together */
+  letter-spacing: -0.02em;
+  color: var(--pink);
+  text-decoration: none;
+  /* Horizontal compression factor: keep letters slightly narrower */
+  --scale-x: 0.85;
+  transform-origin: left bottom;
+  transform: scaleX(var(--scale-x));
+  /* Remove heavy outline for crisp letter rendering */
+  -webkit-text-stroke: 0;
+  /* Improve glyph sharpness */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+  transition: transform 0.2s ease, color 0.2s ease;
+  user-select: none;
+}
+
+/* Light pink on hover and active */
+.tabs .tab:hover,
+.tabs .tab.active {
+  /* When a tab is active (pressed), fill it with a brighter barbie pink and remove the outline for crisp edges */
+  color: var(--pink-active);
+  -webkit-text-stroke: 0;
+  transform: scaleX(var(--scale-x)) scale(1.05) translateY(-2px);
+}
+
+/* On hover state, lighten slightly but remain close to the base pink */
+.tabs .tab:hover {
+  color: var(--pink-active);
+  -webkit-text-stroke: 0;
+  transform: scaleX(var(--scale-x)) scale(1.05) translateY(-2px);
+}
+
+.slider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 0;
+  background-color: #ffffff;
+  border-radius: 2px;
+  transition: transform 0.3s ease, width 0.3s ease;
+}
+
+/* Hide any existing chip-based category bars */
+nav.category-bar,
+nav.category-bar.menu-groups,
+.category-bar.menu-groups {
+  display: none !important;
+}

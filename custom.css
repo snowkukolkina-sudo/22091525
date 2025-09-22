@@ -1,0 +1,294 @@
+/* === DANDY: группыменю—жирныебелыеподписи === */
+.menu-groups,
+.menu-groups * { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Open Sans", sans-serif; }
+.menu-groups a,
+.menu-groups button,
+.menu-groups .chip,
+.menu-groups .chip .label,
+.menu-groups [role="tab"],
+.menu-groups [data-chip] {
+  font-weight: 800 !important;
+  font-variation-settings: "wght" 800;
+  color: #fff !important;
+  text-transform: none !important;  /* НЕ CAPS */
+  letter-spacing: .2px;
+}
+
+/* Stronger override vs built-in nav.category-bar rules */
+nav.menu-groups.category-bar,
+nav.menu-groups.category-bar a,
+nav.menu-groups.category-bar .chip,
+nav.menu-groups.category-bar .chip .label {
+  color: #fff !important;
+  font-weight: 800 !important;
+}
+
+/* Наслучайеслитекствнутри span —наследуемтолщину */
+.menu-groups span, .menu-groups strong, .menu-groups em { font-weight: inherit; color: inherit; }
+
+/* ===== Custom category bar styling inspired by updated chips design ===== */
+
+/* Define color variables for the chip design if they are not already set on the page. */
+:root {
+  /* Yellow underline accent */
+  --accent: #FFC83A;
+  /* Chip background color */
+  --chip: #0b5752;
+  /* Hover/active background for chip */
+  --chip-hover: #0e6a64;
+  /* Chip border color */
+  --chip-border: rgba(255, 255, 255, .12);
+  /* Turquoise baseline lines beneath the chips */
+  --baseline: rgba(11, 87, 82, .55);
+  --baseline2: rgba(14, 106, 100, .45);
+}
+
+/* Style category bar container to match the reference */
+.category-bar {
+  position: relative;
+  padding: 12px 16px 28px;
+}
+
+/* Draw the dual turquoise baseline under the chips */
+.category-bar::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 14px;
+  height: 2px;
+  background: var(--baseline2);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.category-bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6px;
+  height: 3px;
+  background: var(--baseline);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+/* Horizontal scrolling container for chips with no scrollbar */
+.category-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none;  /* IE/Edge */
+}
+.category-scroll::-webkit-scrollbar {
+  display: none;             /* Chrome/Safari */
+}
+
+/* Chip styling: elliptical shape, bold white text, smooth hover */
+.category-bar .chip {
+  color: #fff !important;
+  background: var(--chip);
+  border: 1px solid var(--chip-border);
+  font-weight: 900 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: transform .14s ease, background-color .14s ease, box-shadow .14s ease, border-color .14s ease;
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 999px;
+  position: relative;
+  user-select: none;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+/* Remove any existing fire animations from the chip */
+.category-bar .chip.fire {
+  animation: none !important;
+}
+
+/* Hover and active states for chips */
+.category-bar .chip:hover,
+.category-bar .chip.active {
+  background: var(--chip-hover);
+  border-color: rgba(255, 255, 255, .16);
+}
+
+/* Slight scale up on active chip */
+.category-bar .chip.active {
+  transform: scale(1.06);
+}
+
+/* Ensure child elements inside chip do not inherit unwanted styles */
+.category-bar .chip * {
+  text-decoration: none !important;
+}
+
+/* When using image-based chips (pink categories), remove default padding, border and background, and size the image */
+.category-bar .chip img {
+  /* When chips are rendered as images, ensure they size consistently */
+  display: block !important;
+  height: 46px !important;
+  width: auto !important;
+}
+.category-bar .chip {
+  /* Remove default padding, border, background and radius so the image stands alone */
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
+/* Prevent hover/active states from adding backgrounds or borders when using image chips */
+.category-bar .chip:hover,
+.category-bar .chip.active {
+  background: transparent !important;
+  border: none !important;
+}
+/* === Category bar slider === */
+/* Position relative ensures the underline slider sits correctly */
+.category-bar {
+  position: relative;
+}
+/* Slider track under the chips */
+.category-bar .chip-underline {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 8px;
+  height: 14px;
+  pointer-events: auto;
+  user-select: none;
+  touch-action: none;
+}
+.category-bar .chip-underline::before {
+  content: "";
+  position: absolute;
+  inset: -8px 0 -8px 0;
+}
+.category-bar .chip-underline .thumb {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  height: 4px;
+  width: var(--w, 40px);
+  transform: translateX(var(--x, 0));
+  background: var(--accent);
+  border-radius: 4px;
+  box-shadow: 0 0 0.5px rgba(0, 0, 0, 0.15);
+  cursor: grab;
+  touch-action: none;
+}
+/* Cursor when dragging */
+.category-bar.dragging .chip-underline .thumb {
+  cursor: grabbing;
+}
+
+/*
+ * Override styles for category bars marked with the `menu-groups` class.
+ * These bars appear on most pages (index, about, contacts, delivery, franchise, jobs)
+ * and should match the compact height/padding used on the "Подарочные сертификаты"
+ * page. We override all padding, positioning and sizing properties with `!important`
+ * to ensure our rules take precedence over any inline or page-specific styles.
+ */
+
+/* Base container styles: match gifts page dimensions */
+.category-bar.menu-groups {
+  display: block !important;
+  overflow-x: auto !important;
+  white-space: nowrap !important;
+  padding: 8px 16px !important;
+  background: var(--secondary) !important;
+  border-bottom: 1px solid var(--chip-border) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
+}
+
+/* Remove the dual turquoise baseline lines for compact look */
+.category-bar.menu-groups::before,
+.category-bar.menu-groups::after {
+  display: none !important;
+}
+
+/* Scrolling container overrides: narrow gaps and matching padding */
+.category-bar.menu-groups .category-scroll {
+  display: flex !important;
+  overflow-x: auto !important;
+  white-space: nowrap !important;
+  /* Remove vertical padding so total height matches the gifts page.
+     The parent nav already adds 8px of vertical padding. */
+  padding: 0 !important;
+  gap: 6px !important;
+}
+
+/* Chip styling: replicate gifts page proportions */
+.category-bar.menu-groups .chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin: 4px !important;
+  padding: 8px 14px !important;
+  border-radius: 32px !important;
+  background: var(--chip) !important;
+  border: 1px solid var(--chip-border) !important;
+  color: var(--text-on-green) !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: background 0.2s ease !important;
+}
+
+/* Hover state: darken chip */
+.category-bar.menu-groups .chip:hover,
+.category-bar.menu-groups .chip.active {
+  background: var(--chip-hover) !important;
+  border-color: rgba(255, 255, 255, .16) !important;
+}
+
+/* Remove any fire animations on chips for menu-groups */
+.category-bar.menu-groups .chip.fire {
+  animation: none !important;
+}
+
+/* Letter spans within chips: preserve bold weight and slight margin */
+.category-bar.menu-groups .chip .letter {
+  font-weight: 800 !important;
+  margin-right: 2px !important;
+}
+
+/* Underline slider adjustments: thinner bar aligned closer to chips */
+.category-bar.menu-groups .chip-underline {
+  position: absolute !important;
+  left: 16px !important;
+  right: 16px !important;
+  bottom: 4px !important;
+  height: 4px !important;
+  pointer-events: auto !important;
+  user-select: none !important;
+  touch-action: none !important;
+}
+
+.category-bar.menu-groups .chip-underline .thumb {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  height: 4px !important;
+  width: var(--w, 40px) !important;
+  transform: translateX(var(--x, 0)) !important;
+  background: var(--accent) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 0 0.5px rgba(0, 0, 0, 0.15) !important;
+  cursor: grab !important;
+  touch-action: none !important;
+}
+
+/* Cursor when dragging slider on menu-groups */
+.category-bar.menu-groups.dragging .chip-underline .thumb {
+  cursor: grabbing !important;
+}
